@@ -1,0 +1,67 @@
+---
+import { ratio, fmt, grade, rgbString } from "../lib/contrast";
+import type { Swatch, Accent } from "../data/brand";
+
+export interface Props {
+  swatch: Swatch | Accent;
+  /** Show the tint and border companions (accents only). */
+  tints?: boolean;
+}
+const { swatch: s, tints = false } = Astro.props as Props;
+
+const onInk = ratio("#0B0F1A", s.hex);
+const onWhite = ratio("#EDEAE3", s.hex);
+// Sample text uses whichever of Ink / Warm White reads better on the swatch.
+const useInk = onInk >= onWhite;
+const sampleFg = useInk ? "#0B0F1A" : "#EDEAE3";
+const sampleName = useInk ? "Ink" : "Warm White";
+const sampleRatio = Math.max(onInk, onWhite);
+const accent = "dim" in s ? (s as Accent) : undefined;
+const copyId = `hex-${s.id}`;
+---
+
+<article class="sw">
+  <div class="sw__chip" style={`--sw:${s.hex};--fg:${sampleFg}`}>
+    <span class="sw__aa" aria-hidden="true">Aa</span>
+    <span class="sw__ratio">{sampleName} · {fmt(sampleRatio)}:1 {grade(sampleRatio)}</span>
+  </div>
+
+  <div class="sw__body">
+    <h3 class="sw__name">{s.name}</h3>
+    <p class="sw__role">{s.role}</p>
+
+    <dl class="spec">
+      <dt>Hex</dt><dd><code class="inline" id={copyId}>{s.hex}</code></dd>
+      <dt>RGB</dt><dd>{rgbString(s.hex)}</dd>
+      <dt>Token</dt><dd><code class="inline">{s.token}</code></dd>
+      {tints && accent && (
+        <>
+          <dt>Tint</dt><dd><code class="inline">{accent.dimToken}</code> · {accent.dim}</dd>
+          <dt>Border</dt><dd><code class="inline">{accent.borderToken}</code> · {accent.border}</dd>
+        </>
+      )}
+    </dl>
+
+    <p class="sw__use">{s.usage}</p>
+
+    <button class="copy-btn" type="button" data-copy={copyId} data-label="Copy hex" hidden>Copy hex</button>
+  </div>
+</article>
+
+<style>
+  .sw { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--bd); border-radius: var(--radius); overflow: hidden; }
+  .sw__chip {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: .75rem;
+    min-height: 7.5rem; padding: 1rem 1.1rem;
+    background: var(--sw); color: var(--fg);
+    border-bottom: 1px solid var(--bd);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+  }
+  .sw__aa { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; line-height: 1; }
+  .sw__ratio { font-family: var(--font-mono); font-size: .75rem; font-weight: 600; text-align: right; }
+  .sw__body { display: flex; flex-direction: column; gap: .75rem; padding: 1.1rem 1.1rem 1.25rem; flex: 1; }
+  .sw__name { font-size: 1.05rem; font-weight: 600; }
+  .sw__role { margin-top: -.5rem; font-size: .8125rem; font-weight: 600; color: var(--teal); }
+  .sw__use { font-size: .85rem; line-height: 1.65; color: var(--mb); }
+  .copy-btn { align-self: flex-start; margin-top: auto; }
+</style>

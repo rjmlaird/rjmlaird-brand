@@ -1,0 +1,95 @@
+---
+import "@fontsource/space-grotesk/300.css";
+import "@fontsource/space-grotesk/500.css";
+import "@fontsource/space-grotesk/600.css";
+import "@fontsource/space-grotesk/700.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/600.css";
+import "../styles/global.css";
+
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import { brand } from "../data/brand";
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Overrides the default social image. */
+  image?: string;
+}
+
+const { title, description, image = "/og.png" } = Astro.props as Props;
+const siteUrl = Astro.site!.href;
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const isHome = Astro.url.pathname === "/";
+const fullTitle = isHome ? `${brand.name} brand portal` : `${title} · ${brand.name} brand portal`;
+const imageUrl = new URL(image, siteUrl).href;
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0B0F1A" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={`${brand.name} brand portal`} />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content="RJM Laird logo on a dark background with the words brand portal" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav current={Astro.url.pathname} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <p class="sr-only" role="status" id="live-status"></p>
+
+    <script>
+      // Progressive enhancement: copy buttons stay hidden without JavaScript.
+      const status = document.getElementById("live-status");
+      document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
+        btn.hidden = false;
+        const label = btn.dataset.label ?? btn.textContent ?? "";
+        btn.addEventListener("click", async () => {
+          const target = document.getElementById(btn.dataset.copy ?? "");
+          const value = btn.dataset.value ?? target?.textContent ?? "";
+          try {
+            await navigator.clipboard.writeText(value.trim());
+            btn.textContent = "Copied";
+            if (status) status.textContent = "Copied to clipboard";
+          } catch {
+            btn.textContent = "Press Ctrl+C";
+            if (target) {
+              const sel = window.getSelection();
+              const range = document.createRange();
+              range.selectNodeContents(target);
+              sel?.removeAllRanges();
+              sel?.addRange(range);
+            }
+          }
+          setTimeout(() => { btn.textContent = label; }, 1800);
+        });
+      });
+    </script>
+  </body>
+</html>

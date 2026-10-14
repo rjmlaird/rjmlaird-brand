@@ -1,0 +1,118 @@
+---
+import { statSync } from "node:fs";
+import { join } from "node:path";
+import Layout from "../layouts/Layout.astro";
+
+const pub = (p: string) => join(process.cwd(), "public", p);
+const size = (p: string) => {
+  try {
+    const b = statSync(pub(p)).size;
+    return b < 1024 ? `${b} B` : b < 1048576 ? `${Math.round(b / 1024)} KB` : `${(b / 1048576).toFixed(1)} MB`;
+  } catch {
+    return "";
+  }
+};
+
+const L = "assets/logos/";
+const lockups = [
+  { id: "horizontal", name: "Horizontal", note: "Default" },
+  { id: "stacked", name: "Stacked", note: "Square and portrait" },
+  { id: "wordmark", name: "Wordmark", note: "Wide and tight" },
+  { id: "mark", name: "Orbit mark", note: "Avatar and icon" },
+];
+const colourways = [
+  { id: "colour-on-dark", name: "Colour on dark", bg: "#0B0F1A" },
+  { id: "ink", name: "Ink", bg: "#EDEAE3" },
+  { id: "white", name: "White", bg: "#1A2236" },
+];
+
+const files = [
+  { name: "tokens.css", desc: "CSS custom properties: surfaces, text, accents, tints, lines, layout and type.", href: "/downloads/tokens.css", path: "" },
+  { name: "tokens.json", desc: "The same tokens as JSON, for design tools and build pipelines.", href: "/downloads/tokens.json", path: "" },
+  { name: "RJMLaird-Accessibility-Guidance.pdf", desc: "Contrast-safe colour combinations and colour rules (one page).", href: "/assets/downloads/RJMLaird-Accessibility-Guidance.pdf", path: "assets/downloads/RJMLaird-Accessibility-Guidance.pdf" },
+  { name: "favicon.svg", desc: "Simplified orbit mark on an Ink tile, for browser tabs.", href: "/favicon.svg", path: "favicon.svg" },
+  { name: "apple-touch-icon.png", desc: "180 × 180 icon for iOS home screens.", href: "/apple-touch-icon.png", path: "apple-touch-icon.png" },
+  { name: "og.png", desc: "1200 × 630 default social preview image.", href: "/og.png", path: "og.png" },
+];
+---
+
+<Layout title="Downloads" description="Download the RJM Laird logo files (SVG and PNG), design tokens, favicon, social image and accessibility guidance.">
+  <header class="page-head">
+    <p class="kk">Downloads</p>
+    <h1>Get the assets.</h1>
+    <p class="lede">Logos are outlined SVG, so they stay sharp at any size, plus transparent PNGs. Pick the colourway that matches your background; the <a href="/logo/#colourways">logo page</a> explains which.</p>
+  </header>
+
+  <section class="band band--alt" aria-labelledby="logos">
+    <p class="sl">Logo files</p>
+    <h2 class="h2" id="logos">Four lockups, <em>three colourways.</em></h2>
+    <div class="lockups">
+      {lockups.map((l) => (
+        <section class="lk" aria-labelledby={`lk-${l.id}`}>
+          <h3 class="h3" id={`lk-${l.id}`}>{l.name} <span class="lk__note">{l.note}</span></h3>
+          <ul class="lk__row">
+            {colourways.map((c) => {
+              const base = `${L}rjmlaird-${l.id}-${c.id}`;
+              return (
+                <li class="lk__card">
+                  <div class="lk__stage" style={`background:${c.bg}`}>
+                    <img src={`/${base}.svg`} alt={`${l.name} logo, ${c.name}`} style={l.id === "mark" ? "height:4.5rem;width:auto" : l.id === "stacked" ? "height:6.5rem;width:auto" : "width:min(100%,11rem);height:auto"} loading="lazy" />
+                  </div>
+                  <p class="lk__name">{c.name}</p>
+                  <p class="lk__links">
+                    <a href={`/${base}.svg`} download>SVG <span class="sr-only">{`${l.name}, ${c.name}`}</span> <span class="lk__size">{size(`${base}.svg`)}</span></a>
+                    <a href={`/${base}.png`} download>PNG <span class="sr-only">{`${l.name}, ${c.name}`}</span> <span class="lk__size">{size(`${base}.png`)}</span></a>
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="other">
+    <p class="sl">Tokens, icons and guidance</p>
+    <h2 class="h2" id="other">Everything <em>else.</em></h2>
+    <div class="table-wrap" role="region" aria-label="Other downloads" tabindex="0" style="margin-top:2rem">
+      <table class="table">
+        <caption>Files</caption>
+        <thead><tr><th scope="col">File</th><th scope="col">What it is</th><th scope="col">Size</th></tr></thead>
+        <tbody>
+          {files.map((f) => (
+            <tr>
+              <th scope="row"><a href={f.href} download>{f.name}</a></th>
+              <td>{f.desc}</td>
+              <td>{f.path ? size(f.path) : "—"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="use">
+    <p class="sl">Using the assets</p>
+    <h2 class="h2" id="use">Please use them <em>as supplied.</em></h2>
+    <ul class="copy">
+      <li>Use the files to refer to or work with RJM Laird. Don’t edit, recolour, redraw or retype them; see the <a href="/logo/#misuse">misuse examples</a>.</li>
+      <li>Keep the clear space and minimum sizes from the <a href="/logo/">logo page</a>.</li>
+      <li>For any other use, or a format that isn’t here, ask first via <a href="https://rjmlaird.co.uk">rjmlaird.co.uk</a>.</li>
+    </ul>
+  </section>
+</Layout>
+
+<style>
+  .lockups { display: grid; gap: 2.5rem; margin-top: 2rem; }
+  .lk__note { margin-left: .5rem; font-family: var(--font-body); font-size: .8125rem; font-weight: 400; color: var(--mb); }
+  .lk__row { display: grid; gap: 1rem; margin-top: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); list-style: none; }
+  .lk__card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--bd); border-radius: var(--radius); overflow: hidden; }
+  .lk__stage { display: grid; place-items: center; min-height: 8.5rem; padding: 1.25rem; border-bottom: 1px solid var(--bd); }
+  .lk__name { padding: .75rem 1rem 0; font-family: var(--font-display); font-size: .875rem; font-weight: 600; }
+  .lk__links { display: flex; gap: .5rem 1.25rem; padding: .35rem 1rem .9rem; flex-wrap: wrap; }
+  .lk__links a { display: inline-flex; align-items: center; gap: .35rem; min-height: 44px; font-family: var(--font-display); font-size: .8125rem; font-weight: 700; letter-spacing: .06em; }
+  .lk__size { font-family: var(--font-mono); font-size: .6875rem; font-weight: 400; letter-spacing: 0; color: var(--m); }
+  .copy li { list-style: disc; margin-left: 1.25rem; }
+  ul.copy { padding-left: 0; }
+</style>

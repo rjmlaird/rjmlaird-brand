@@ -1,0 +1,22 @@
+{
+  "horizontal": {
+    "w": 448.88,
+    "h": 120,
+    "capRatio": 0.37
+  },
+  "stacked": {
+    "w": 298.88,
+    "h": 190.8,
+    "capRatio": 0.23
+  },
+  "wordmark": {
+    "w": 298.88,
+    "h": 44.8,
+    "capRatio": 1
+  },
+  "mark": {
+    "w": 120,
+    "h": 120,
+    "capRatio": 0.37
+  }
+}

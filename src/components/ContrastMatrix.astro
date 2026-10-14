@@ -1,0 +1,64 @@
+---
+// Computed from the hex values at build time, so it can never drift from the tokens.
+import { ratio, fmt, grade } from "../lib/contrast";
+
+export interface Props {
+  fgs: { name: string; hex: string }[];
+  bgs: { name: string; hex: string }[];
+  caption: string;
+}
+const { fgs, bgs, caption } = Astro.props as Props;
+---
+
+<div class="table-wrap" role="region" aria-label={caption} tabindex="0">
+  <table class="table matrix">
+    <caption>{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">Text or graphic</th>
+        {bgs.map((b) => <th scope="col">On {b.name}<br /><span class="hex">{b.hex}</span></th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {fgs.map((f) => (
+        <tr>
+          <th scope="row">{f.name}<br /><span class="hex">{f.hex}</span></th>
+          {bgs.map((b) => {
+            if (f.hex.toLowerCase() === b.hex.toLowerCase()) return <td class="cell cell--same">—</td>;
+            const r = ratio(f.hex, b.hex);
+            const g = grade(r);
+            return (
+              <td class="cell" style={`--cbg:${b.hex};--cfg:${f.hex}`}>
+                <span class="cell__aa" aria-hidden="true">Aa</span>
+                <span class:list={["cell__badge", g === "Fail" ? "is-fail" : "is-pass"]}>
+                  <span aria-hidden="true">{g === "Fail" ? "✕" : "✓"}</span>
+                  {g}<span class="sr-only"> contrast</span> · {fmt(r)}:1
+                </span>
+              </td>
+            );
+          })}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<p class="key">
+  <strong>AAA</strong> ≥ 7:1 · <strong>AA</strong> ≥ 4.5:1 · <strong>AA large</strong> ≥ 3:1 (text of 24px or 18.66px bold, and graphics) · <strong>Fail</strong> below 3:1.
+  “Aa” is drawn in the actual colours; the label states the result, so colour is never the only signal.
+</p>
+
+<style>
+  .matrix { min-width: 46rem; }
+  .matrix th, .matrix td { vertical-align: middle; }
+  .hex { font-family: var(--font-mono); font-size: .6875rem; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--m); }
+  .cell { background: var(--cbg); padding: .6rem .8rem; }
+  .cell--same { color: var(--m); text-align: center; background: var(--ink2); }
+  .cell__aa { display: block; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; line-height: 1.1; color: var(--cfg); }
+  .cell__badge {
+    display: inline-flex; align-items: center; gap: .3rem; margin-top: .35rem; padding: .12rem .45rem; border-radius: 2px;
+    background: #EDEAE3; color: #0B0F1A; font-family: var(--font-mono); font-size: .6875rem; font-weight: 600; white-space: nowrap;
+  }
+  .cell__badge.is-fail { background: #0B0F1A; color: #EDEAE3; outline: 1px solid #EDEAE3; outline-offset: -1px; }
+  .key { max-width: 56rem; margin-top: 1rem; font-size: .8125rem; line-height: 1.65; color: var(--mb); }
+  .key strong { color: var(--w); font-weight: 600; }
+</style>

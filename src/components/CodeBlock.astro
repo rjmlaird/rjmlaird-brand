@@ -1,0 +1,17 @@
+---
+export interface Props {
+  code: string;
+  label?: string;
+  /** Unique on the page; lets the copy button find its text. */
+  id: string;
+}
+const { code, label = "Code", id } = Astro.props as Props;
+---
+
+<div class="code">
+  <div class="code__bar">
+    <span class="code__label">{label}</span>
+    <button class="copy-btn" type="button" data-copy={id} data-label="Copy" hidden>Copy</button>
+  </div>
+  <pre tabindex="0" aria-label={`${label}, code`}><code id={id}>{code}</code></pre>
+</div>

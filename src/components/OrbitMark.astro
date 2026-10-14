@@ -1,0 +1,57 @@
+---
+// Inline orbit mark. Static by default. With `animate`, the outer ring and planet turn clockwise and the
+// inner ring anticlockwise; `[data-paused]` on any ancestor pauses it, and prefers-reduced-motion stops it.
+export interface Props {
+  size?: string;
+  animate?: boolean;
+  /** Accessible name. Omit for a purely decorative mark. */
+  label?: string;
+  fg?: string;
+  accent?: string;
+  class?: string;
+}
+const { size = "100%", animate = false, label, fg = "var(--w)", accent = "var(--teal)", class: className } = Astro.props as Props;
+const id = `gap-${Math.random().toString(36).slice(2, 8)}`;
+// Planet at -40° on the outer ring (r = 52 around 60,60).
+const px = 60 + 52 * Math.cos((-40 * Math.PI) / 180);
+const py = 60 + 52 * Math.sin((-40 * Math.PI) / 180);
+---
+
+<svg
+  class:list={["orbit", { "orbit--spin": animate }, className]}
+  viewBox="0 0 120 120"
+  width={size}
+  height={size}
+  role={label ? "img" : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : "true"}
+  focusable="false"
+>
+  <defs>
+    <mask id={id}>
+      <rect width="120" height="120" fill="#fff" />
+      <circle cx={px.toFixed(2)} cy={py.toFixed(2)} r="14" fill="#000" />
+    </mask>
+  </defs>
+  <g class="orbit__outer">
+    <circle cx="60" cy="60" r="52" fill="none" stroke={fg} stroke-width="5" mask={`url(#${id})`} />
+    <circle cx={px.toFixed(2)} cy={py.toFixed(2)} r="9" fill={accent} />
+  </g>
+  <g class="orbit__inner">
+    <circle cx="60" cy="60" r="31" fill="none" stroke={accent} stroke-width="5" />
+  </g>
+  <circle cx="60" cy="60" r="6" fill={fg} />
+</svg>
+
+<style>
+  .orbit { display: block; }
+  .orbit__outer, .orbit__inner { transform-origin: 60px 60px; }
+
+  @keyframes cw  { to { transform: rotate(360deg); } }
+  @keyframes ccw { to { transform: rotate(-360deg); } }
+
+  .orbit--spin .orbit__outer { animation: cw 40s linear infinite; }
+  .orbit--spin .orbit__inner { animation: ccw 26s linear infinite; }
+  :global([data-paused]) .orbit--spin .orbit__outer,
+  :global([data-paused]) .orbit--spin .orbit__inner { animation-play-state: paused; }
+</style>

@@ -1,0 +1,68 @@
+/* ==========================================================================
+   RJM Laird brand tokens — v1.0
+   Source of truth for brand.rjmlaird.co.uk. Mirrors the live :root block in
+   rjmlaird.co.uk's global.css. `npm run check` fails if src/data/brand.ts and
+   this file disagree.
+
+   Plain CSS with no build step: Astro sites import it, and the Hono API can
+   inline or link it. Served at /downloads/tokens.css.
+   ========================================================================== */
+
+:root {
+  /* Surfaces */
+  --ink: #0B0F1A;
+  --ink2: #0F1520;
+  --card: #141B29;
+  --lift: #1A2236;
+
+  /* Text */
+  --w: #EDEAE3;
+  --mb: #9AA4B8;   /* body-secondary: ≥ 4.5:1 on --ink, --card and --lift */
+  --m: #8A98B2;    /* muted: ≥ 4.5:1 on --ink and --card; avoid on tiny text over --lift */
+
+  /* Accents (+ dim fill / border variants) */
+  --teal: #00C2A8;   --td: rgba(0,194,168,.13);   --tb: rgba(0,194,168,.26);
+  --amber: #F5A623;  --ad: rgba(245,166,35,.11);  --ab: rgba(245,166,35,.26);
+  --violet: #A78BFA; --vd: rgba(167,139,250,.11); --vb: rgba(167,139,250,.26);
+  --coral: #FF8080;  --cd: rgba(255,128,128,.11); --cb: rgba(255,128,128,.3);
+  --green: #4ADE80;  --gd: rgba(74,222,128,.11);  --gb: rgba(74,222,128,.26);
+  --sky: #38BDF8;    --sd: rgba(56,189,248,.11);  --sb: rgba(56,189,248,.26);
+
+  /* Lines & focus */
+  --bd: rgba(255,255,255,.11);
+  --bm: rgba(255,255,255,.2);
+  --focus: #7FE6D4;
+
+  /* Layout */
+  --content-max: 1320px;
+  --gutter-min: clamp(1.25rem, 5vw, 2.5rem);
+  --gutter: max(var(--gutter-min), calc((100% - var(--content-max)) / 2));
+  --section-y: clamp(3rem, 6vw, 5rem);
+  --nav-h: 3.5rem;
+  --radius: 6px;
+
+  /* Type */
+  --font-display: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  color-scheme: dark;
+
+  /* Bridge tokens for components authored against a generic --color-* palette */
+  --color-text: var(--w);
+  --color-text-muted: var(--mb);
+  --color-text-subtle: var(--m);
+  --color-surface: var(--card);
+  --color-border: var(--bd);
+  --color-border-subtle: var(--bd);
+  --color-accent: var(--teal);
+  --color-accent-subtle: var(--td);
+  --color-link: var(--teal);
+}
+
+/* Space theme (space.rjmlaird.co.uk): amber leads, teal supports. */
+[data-theme="space"] {
+  --color-accent: var(--amber);
+  --color-accent-subtle: var(--ad);
+  --color-link: var(--amber);
+}

@@ -1,0 +1,18 @@
+---
+export interface Props {
+  kind: "do" | "dont";
+  /** Background of the demonstration area. */
+  bg?: string;
+  /** What this example shows. */
+  caption: string;
+}
+const { kind, bg = "var(--ink)", caption } = Astro.props as Props;
+---
+
+<figure class:list={["dd", `dd--${kind}`]}>
+  <div class="dd__stage" style={`background:${bg}`}><slot /></div>
+  <figcaption class="dd__cap">
+    <span class="dd__mark">{kind === "do" ? "Do" : "Don’t"}</span>
+    <span>{caption}</span>
+  </figcaption>
+</figure>

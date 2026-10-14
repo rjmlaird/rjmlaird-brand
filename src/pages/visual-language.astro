@@ -1,0 +1,175 @@
+---
+import Layout from "../layouts/Layout.astro";
+import OrbitMark from "../components/OrbitMark.astro";
+import DoDont from "../components/DoDont.astro";
+---
+
+<Layout title="Visual language" description="Orbit rings, kicker rules, tone-edged cards, layout principles, photography direction and motion for the RJM Laird brand.">
+  <header class="page-head">
+    <p class="kk">Visual language</p>
+    <h1>Instruments, not stock galaxies.</h1>
+    <p class="lede">A small set of motifs repeated with discipline: orbits, hairlines, kicker rules and tone-edged cards. Calm surfaces let the content and the single teal signal do the work.</p>
+  </header>
+
+  <section class="band band--alt" aria-labelledby="motifs">
+    <p class="sl">Motifs</p>
+    <h2 class="h2" id="motifs">Six devices, <em>used sparingly.</em></h2>
+    <ul class="grid" style="--min:20rem;margin-top:2rem;list-style:none">
+      <li class="card">
+        <div class="demo demo--orbit" data-motion>
+          <OrbitMark size="9rem" animate />
+        </div>
+        <h3>Orbit rings</h3>
+        <p><strong>Use:</strong> as a quiet backdrop at 6–12% opacity, or as the mark. Rings turn slowly (25–65 s).</p>
+        <p><strong>Avoid:</strong> full-opacity rings behind text, or more than one animated element per screen.</p>
+        <button class="btn btn--outline btn--sm" type="button" data-pause hidden aria-pressed="false">Pause motion</button>
+      </li>
+      <li class="card">
+        <div class="demo"><p class="kk" style="margin:0">Section label</p></div>
+        <h3>Kicker rule</h3>
+        <p><strong>Use:</strong> a 26px teal rule plus a small uppercase label above a page or hero heading.</p>
+        <p><strong>Avoid:</strong> using it on every heading. One per page header.</p>
+      </li>
+      <li class="card">
+        <div class="demo"><p class="sl" style="margin:0;width:100%">The idea</p></div>
+        <h3>Label with hairline</h3>
+        <p><strong>Use:</strong> to open a band of content. The hairline runs to the edge of the column.</p>
+        <p><strong>Avoid:</strong> stacking two labels in one band.</p>
+      </li>
+      <li class="card">
+        <div class="demo">
+          <div class="edge" style="--t:var(--violet)"><strong>Science</strong><span>Violet edge</span></div>
+        </div>
+        <h3>Tone-edged card</h3>
+        <p><strong>Use:</strong> a 3px left border in a role colour to tag a card’s topic, with the topic written out.</p>
+        <p><strong>Avoid:</strong> colouring whole card backgrounds.</p>
+      </li>
+      <li class="card">
+        <div class="demo"><span class="num-demo">01</span><span class="num-demo">02</span><span class="num-demo">03</span></div>
+        <h3>Numbered labels</h3>
+        <p><strong>Use:</strong> two-digit teal numbers to order a short sequence of ideas or steps.</p>
+        <p><strong>Avoid:</strong> numbering lists longer than eight.</p>
+      </li>
+      <li class="card">
+        <div class="demo"><span class="pill pill--teal">Tint + border</span><span class="pill pill--amber">Amber</span><span class="pill pill--sky">Sky</span></div>
+        <h3>Tinted pills</h3>
+        <p><strong>Use:</strong> an 11–13% fill, a 26% border and solid accent text for status and category.</p>
+        <p><strong>Avoid:</strong> relying on the colour; always write the label.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="band" aria-labelledby="layout">
+    <p class="sl">Layout</p>
+    <h2 class="h2" id="layout">Generous, <em>ruled and calm.</em></h2>
+    <div class="table-wrap" role="region" aria-label="Layout tokens" tabindex="0" style="margin-top:2rem">
+      <table class="table">
+        <caption>Layout tokens</caption>
+        <thead><tr><th scope="col">Property</th><th scope="col">Token</th><th scope="col">Value</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Content width</th><td><code class="inline">--content-max</code></td><td>1320px, with full-bleed section backgrounds</td></tr>
+          <tr><th scope="row">Gutter</th><td><code class="inline">--gutter-min</code></td><td>clamp(1.25rem, 5vw, 2.5rem)</td></tr>
+          <tr><th scope="row">Section spacing</th><td><code class="inline">--section-y</code></td><td>clamp(3rem, 6vw, 5rem)</td></tr>
+          <tr><th scope="row">Radius</th><td><code class="inline">--radius</code></td><td>6px for cards, 3px for buttons, 2px for tags, 999px for filter chips</td></tr>
+          <tr><th scope="row">Separation</th><td><code class="inline">--bd</code></td><td>1px hairlines at 11% white, alternating Ink and Ink 2 bands, not shadows</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="photo">
+    <p class="sl">Photography and imagery</p>
+    <h2 class="h2" id="photo">Real instruments, <em>real places.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <div class="copy">
+        <ul>
+          <li><strong>Documentary first.</strong> Telescopes, labs, launch sites, data and people at work. Show the thing, not a metaphor for it.</li>
+          <li><strong>Dark and high-contrast.</strong> Imagery should sit comfortably on Ink. Avoid pale, washed-out frames.</li>
+          <li><strong>No clichés.</strong> No composite galaxies, lens flares, floating astronauts or neon gradients.</li>
+          <li><strong>16:9 for features,</strong> 4:5 for portraits, 1:1 for avatars. Crop to the subject, never stretch.</li>
+          <li><strong>Always credit and caption.</strong> Name the agency or photographer, and check each licence: NASA, ESA and ESO terms differ.</li>
+          <li><strong>Always write alt text</strong> that says what the image shows and why it is there. Decorative images get an empty alt.</li>
+        </ul>
+      </div>
+      <figure class="photo">
+        <div class="photo__img" role="img" aria-label="Placeholder for a photograph, drawn as a dark field with a few stars">
+          <span class="image-credit">Credit: Photographer / Agency</span>
+        </div>
+        <figcaption>16:9 feature image with the credit overlay: black at 82% with white text, which stays above 13:1 even over a pure-white photo.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="data">
+    <p class="sl">Data and diagrams</p>
+    <h2 class="h2" id="data">Label directly. <em>Never rely on hue.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <ul class="copy">
+        <li>Order series as Teal, Amber, Violet, Sky, Coral, Green. Keep each series’ colour constant across a report.</li>
+        <li>Graphics need <strong>3:1</strong> against their background. On Card, every accent passes.</li>
+        <li>Label lines and bars directly, and vary shape, pattern or dash as well as colour.</li>
+        <li>Give every chart a title, a one-sentence takeaway and a data table or text alternative.</li>
+      </ul>
+      <div class="dd__stage" style="background:var(--card);border:1px solid var(--bd);border-radius:var(--radius)">
+        <svg viewBox="0 0 260 120" width="100%" role="img" aria-label="Two example lines, labelled directly: Teal rises steadily, Amber falls" style="max-width:26rem">
+          <line x1="10" y1="100" x2="250" y2="100" stroke="#9AA4B8" stroke-width="1" />
+          <polyline points="10,90 70,70 130,55 190,35 245,22" fill="none" stroke="#00C2A8" stroke-width="3" />
+          <polyline points="10,30 70,45 130,60 190,78 245,88" fill="none" stroke="#F5A623" stroke-width="3" stroke-dasharray="7 5" />
+          <text x="196" y="16" fill="#00C2A8" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">Teal ●</text>
+          <text x="196" y="112" fill="#F5A623" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">Amber ▬ ▬</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="motion">
+    <p class="sl">Motion</p>
+    <h2 class="h2" id="motion">Slow, <em>optional and quiet.</em></h2>
+    <ul class="grid" style="--min:16rem;margin-top:2rem;list-style:none">
+      <li class="card"><h3>Short transitions</h3><p>Colour and border changes take 0.2 s; reveals up to 0.5 s. Nothing bounces.</p></li>
+      <li class="card"><h3>Reduced motion wins</h3><p>With <code class="inline">prefers-reduced-motion</code>, all animation and smooth scrolling stop.</p></li>
+      <li class="card"><h3>Pause anything long</h3><p>Decorative motion lasting over five seconds needs a pause control or must be removable (WCAG 2.2.2).</p></li>
+      <li class="card"><h3>Reveal only with JS</h3><p>Scroll-reveal effects apply only when scripting is enabled, so no one is left with hidden content.</p></li>
+    </ul>
+  </section>
+</Layout>
+
+<style>
+  .demo { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .75rem; min-height: 8.5rem; padding: 1rem; background: var(--ink); border: 1px solid var(--bd); border-radius: var(--radius); }
+  .demo--orbit { overflow: hidden; }
+  .edge { display: flex; flex-direction: column; gap: .15rem; padding: .8rem 1rem; background: var(--card); border: 1px solid var(--bd); border-left: 3px solid var(--t); border-radius: var(--radius); }
+  .edge span { font-size: .8125rem; color: var(--mb); }
+  .num-demo { font-family: var(--font-display); font-size: .75rem; font-weight: 700; letter-spacing: .1em; color: var(--teal); }
+  .card .btn { align-self: flex-start; margin-top: auto; background: var(--card); }
+  .photo { margin: 0; }
+  .photo__img {
+    position: relative; aspect-ratio: 16 / 9; border-radius: 1rem; overflow: hidden; border: 1px solid var(--bd);
+    background:
+      radial-gradient(1.5px 1.5px at 20% 30%, #EDEAE3 50%, transparent 52%),
+      radial-gradient(1px 1px at 68% 22%, #EDEAE3 50%, transparent 52%),
+      radial-gradient(1.5px 1.5px at 82% 64%, #EDEAE3 50%, transparent 52%),
+      radial-gradient(1px 1px at 35% 74%, #EDEAE3 50%, transparent 52%),
+      radial-gradient(ellipse at 70% 90%, #1A2236, #0B0F1A 70%);
+  }
+  .image-credit { position: absolute; inset: auto .65rem .65rem; padding: .3rem .5rem; border-radius: .55rem; background: rgba(0,0,0,.82); color: #fff; font-size: .75rem; line-height: 1.3; }
+  .photo figcaption { margin-top: .6rem; font-size: .8125rem; color: var(--mb); }
+  .copy li { list-style: disc; margin-left: 1.25rem; }
+  ul.copy { padding-left: 0; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>("[data-pause]").forEach((btn) => {
+    const scope = btn.closest("li") ?? document.body;
+    const target = scope.querySelector("[data-motion]");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!target) return;
+    btn.hidden = false;
+    if (reduced) { btn.disabled = true; btn.textContent = "Motion off (system setting)"; return; }
+    btn.addEventListener("click", () => {
+      const paused = target.hasAttribute("data-paused");
+      if (paused) target.removeAttribute("data-paused"); else target.setAttribute("data-paused", "");
+      btn.setAttribute("aria-pressed", String(!paused));
+      btn.textContent = paused ? "Pause motion" : "Resume motion";
+    });
+  });
+</script>

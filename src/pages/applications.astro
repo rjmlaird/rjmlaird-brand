@@ -1,0 +1,162 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+import { siteFamily } from "../data/brand";
+
+const L = "/assets/logos/";
+const themeCode = `<!-- Default (teal accent) -->
+<html lang="en-GB">
+
+<!-- Space theme (amber leads, teal supports) -->
+<html lang="en-GB" data-theme="space">`;
+---
+
+<Layout title="Applications" description="How the RJM Laird brand is applied: web, slides, reports, email signatures and social, with the right logo and colours for each.">
+  <header class="page-head">
+    <p class="kk">Applications</p>
+    <h1>The system, in the real world.</h1>
+    <p class="lede">Each format has a default background, a logo version and a short list of rules. When in doubt, start dark, keep Warm White type, and test the contrast.</p>
+  </header>
+
+  <section class="band band--alt" aria-labelledby="web">
+    <p class="sl">Web</p>
+    <h2 class="h2" id="web">One system, <em>five sites.</em></h2>
+    <div class="table-wrap" role="region" aria-label="Sites and themes" tabindex="0" style="margin:2rem 0">
+      <table class="table">
+        <caption>Sites in the family</caption>
+        <thead><tr><th scope="col">Site</th><th scope="col">Role</th><th scope="col">Theme</th></tr></thead>
+        <tbody>{siteFamily.map((s) => <tr><th scope="row"><a href={s.href}>{s.name}</a></th><td>{s.role}</td><td>{s.theme}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <div class="split">
+      <div class="copy">
+        <p>All sites share the same tokens. The space site flips the lead accent to amber with one attribute, and everything that uses <code>--color-accent</code> follows.</p>
+        <ul>
+          <li>Background Ink, alternating with Ink 2 bands.</li>
+          <li>Logo: horizontal, colour on dark, in the header and footer.</li>
+          <li>Skip link, visible focus and 44px touch targets on every page.</li>
+        </ul>
+      </div>
+      <CodeBlock id="code-theme" label="HTML" code={themeCode} />
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="slides">
+    <p class="sl">Presentations</p>
+    <h2 class="h2" id="slides">Dark slides, <em>one idea each.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <div class="slide" role="img" aria-label="Example title slide: a teal label reading Talk, the title Reading the sky in plain English in warm white, and the orbit mark at the bottom">
+        <p class="slide__k">Talk</p>
+        <p class="slide__t">Reading the sky in plain English</p>
+        <div class="slide__f"><img src={`${L}rjmlaird-mark-colour-on-dark.svg`} alt="" width="28" height="28" /><span>RJMLaird · rjmlaird.co.uk</span></div>
+      </div>
+      <ul class="copy">
+        <li>16:9, Ink background, Warm White titles, Mist body text.</li>
+        <li>Body at <strong>24 pt or larger</strong>; titles at 40 pt or larger. Keep to about six lines.</li>
+        <li>Logo: orbit mark in a corner on content slides, full horizontal logo on the title and closing slides.</li>
+        <li>Teal for one emphasis per slide. Never put teal text on a light panel.</li>
+        <li>Describe every image and chart in alt text, and use real slide titles for navigation.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="reports">
+    <p class="sl">Reports and PDFs</p>
+    <h2 class="h2" id="reports">Light pages <em>use Ink.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <div class="cover" role="img" aria-label="Example report cover: Warm White page, a teal block with the word Report, the title in Ink and the Ink logo at the bottom">
+        <p class="cover__tag">Report</p>
+        <p class="cover__title">A short, plain title for the report</p>
+        <p class="cover__rule"></p>
+        <img src={`${L}rjmlaird-horizontal-ink.svg`} alt="" width="150" height="40" />
+      </div>
+      <ul class="copy">
+        <li>Warm White or white paper, <strong>Ink text</strong> (15.9:1 on Warm White), Ink logo.</li>
+        <li>Accents are fills with Ink text only, for example Teal at 8.46:1. Never teal text on paper.</li>
+        <li>Export as <strong>tagged PDF</strong> with a document title, language, real headings and a sensible reading order.</li>
+        <li>Body at 10–11 pt minimum for print, 12 pt or more for screen reading. Don’t scan pages to images.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="email">
+    <p class="sl">Email signature</p>
+    <h2 class="h2" id="email">Text first, <em>logo second.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <div class="sig" aria-label="Example email signature">
+        <p class="sig__name">Ryan Laird</p>
+        <p class="sig__cred">MPhys (Hons) FRAS MInstP CMktr MCIPR</p>
+        <p class="sig__line">Astrophysicist, science communicator and strategist</p>
+        <p class="sig__line"><a href="https://rjmlaird.co.uk">rjmlaird.co.uk</a></p>
+        <img src={`${L}rjmlaird-horizontal-ink.svg`} alt="RJM Laird" width="120" height="32" />
+      </div>
+      <ul class="copy">
+        <li>Emails open on white or in a client’s dark mode, so use the <strong>Ink logo</strong> and Ink text. Credentials in mono are fine in Ink.</li>
+        <li>Put name, role and links as real text. Never put contact details only inside an image.</li>
+        <li>Links are underlined and spell out where they go: “rjmlaird.co.uk”, not “click here”.</li>
+        <li>Logo PNG at about 120–150 px wide, with alt text “RJM Laird”.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="social">
+    <p class="sl">Social</p>
+    <h2 class="h2" id="social">Recognisable <em>at thumbnail size.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <div class="avatars">
+        <figure><span class="avatar"><img src={`${L}rjmlaird-mark-colour-on-dark.svg`} alt="" width="64" height="64" /></span><figcaption>Profile (circle crop)</figcaption></figure>
+        <figure><img class="og" src="/og.png" alt="Social preview card: the logo with the words brand portal and the tagline Precise, plain and curious" width="1200" height="630" /><figcaption>Link preview, 1200 × 630</figcaption></figure>
+      </div>
+      <ul class="copy">
+        <li><strong>Profile:</strong> the orbit mark on Ink, centred with at least 15% padding so a circle crop doesn’t clip the ring.</li>
+        <li><strong>Banners and cards:</strong> Ink background, Warm White headline, one teal accent, horizontal logo.</li>
+        <li><strong>Text lives in the post.</strong> Graphics repeat a short headline; the full message and a link go in the caption.</li>
+        <li><strong>Alt text on every image.</strong> Describe the content, not “graphic”.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="credentials">
+    <p class="sl">Credentials</p>
+    <h2 class="h2" id="credentials">Say it plainly, <em>in mono.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <p class="cred">MPhys (Hons) FRAS MInstP CMktr MCIPR</p>
+      <ul class="copy">
+        <li>Post-nominals use JetBrains Mono, weight 600, in <strong>Amber on dark</strong> (9.4:1 on Ink) or Ink on light.</li>
+        <li>Write them in a fixed order and spell out acronyms on first use in running text.</li>
+        <li>Screen readers read letters one by one: wrap an expansion in the page <code>title</code> or nearby text.</li>
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .copy li { list-style: disc; margin-left: 1.25rem; }
+  ul.copy { padding-left: 0; }
+  .slide { aspect-ratio: 16 / 9; display: flex; flex-direction: column; justify-content: space-between; padding: 7%; background: var(--ink); border: 1px solid var(--bm); border-radius: var(--radius); container-type: inline-size; }
+  .slide__k { font-family: var(--font-display); font-size: 3.2cqw; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--teal); }
+  .slide__t { max-width: 14ch; font-family: var(--font-display); font-size: 9cqw; font-weight: 700; line-height: 1.02; letter-spacing: -.03em; }
+  .slide__f { display: flex; align-items: center; gap: .6rem; font-family: var(--font-display); font-size: 2.8cqw; color: var(--mb); }
+  .slide__f img { height: 5cqw; width: auto; }
+
+  .cover { aspect-ratio: 1 / 1.2; max-width: 20rem; display: flex; flex-direction: column; gap: 1rem; padding: 2rem; background: #EDEAE3; color: #0B0F1A; border-radius: 3px; }
+  .cover__tag { align-self: flex-start; padding: .3rem .7rem; background: #00C2A8; color: #0B0F1A; font-family: var(--font-display); font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; border-radius: 2px; }
+  .cover__title { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; line-height: 1.08; letter-spacing: -.02em; }
+  .cover__rule { height: 1px; margin-top: auto; background: #0B0F1A; opacity: .35; }
+  .cover img { width: 9.5rem; height: auto; }
+
+  .sig { max-width: 24rem; padding: 1.5rem; background: #fff; color: #0B0F1A; border-radius: var(--radius); display: grid; gap: .35rem; font-family: Arial, Helvetica, sans-serif; }
+  .sig__name { font-size: 1.05rem; font-weight: 700; }
+  .sig__cred { font-family: var(--font-mono); font-size: .8rem; font-weight: 600; }
+  .sig__line { font-size: .9rem; line-height: 1.4; }
+  .sig a { color: #0B0F1A; text-decoration: underline; }
+  .sig img { margin-top: .6rem; width: 7.5rem; height: auto; }
+
+  .avatars { display: grid; gap: 1.5rem; }
+  .avatars figure { margin: 0; }
+  .avatars figcaption { margin-top: .5rem; font-size: .8125rem; color: var(--mb); }
+  .avatar { display: grid; place-items: center; width: 6rem; height: 6rem; border-radius: 50%; background: var(--ink); border: 1px solid var(--bm); }
+  .avatar img { width: 62%; height: auto; }
+  .og { width: 100%; max-width: 28rem; height: auto; border-radius: var(--radius); border: 1px solid var(--bd); }
+  .cred { font-family: var(--font-mono); font-size: clamp(1rem, 2.4vw, 1.4rem); font-weight: 600; letter-spacing: .02em; color: var(--amber); }
+</style>

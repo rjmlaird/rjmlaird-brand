@@ -1,0 +1,166 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { ratio, fmt, grade } from "../lib/contrast";
+
+const examples = [
+  { label: "Ink on Warm White", fg: "#0B0F1A", bg: "#EDEAE3", note: "Recommended default for light layouts." },
+  { label: "Ink on Teal", fg: "#0B0F1A", bg: "#00C2A8", note: "Recommended for teal highlights and buttons with dark text." },
+  { label: "Teal on Warm White", fg: "#00C2A8", bg: "#EDEAE3", note: "Do not use teal for text on Warm White." },
+  { label: "Ink on White", fg: "#0B0F1A", bg: "#FFFFFF", note: "Suitable for clean, high-contrast documents." },
+].map((e) => {
+  const r = ratio(e.fg, e.bg);
+  return { ...e, r, g: grade(r) };
+});
+
+const rules = [
+  ["Main body text", "Ink (#0B0F1A) on Warm White (#EDEAE3) or white (#FFFFFF)"],
+  ["Dark-mode body text", "Warm White (#EDEAE3) on Ink (#0B0F1A)"],
+  ["Secondary text on dark", "Mist (#9AA4B8) on Ink, Card or Lift; Haze (#8A98B2) on Ink or Card"],
+  ["Links and accents on dark", "Teal (#00C2A8) on Ink or Card, with an underline on links in running text"],
+  ["Buttons and filled highlights", "Ink text on a Teal, Amber or other accent fill"],
+  ["Anything on light", "Ink text only. Accents appear as fills with Ink text, never as text, lines or icons"],
+  ["Status and category", "Colour plus a written label. Never colour alone"],
+];
+
+const checklist = [
+  "Normal text is at least 4.5:1; large text and graphics at least 3:1, measured on the real background.",
+  "Hover, focus, disabled states and text over images or tints have been checked too.",
+  "Nothing relies on colour alone: status, links, charts and errors also use text, shape or an icon.",
+  "Headings are real headings, in order, and each page has one h1.",
+  "Links say where they go. No “click here”; external and download links are flagged.",
+  "Everything works by keyboard, with a visible 3px focus ring and a skip link on pages with navigation.",
+  "Touch targets are at least 44 × 44 px (never below 24 × 24).",
+  "Images have alt text that says what they show; decorative images have an empty alt.",
+  "Motion respects prefers-reduced-motion, and anything moving for over five seconds can be paused.",
+  "Video has captions and a transcript; audio has a transcript.",
+  "The page reflows at 320px wide and at 400% zoom with no sideways scroll; text size is in rem.",
+  "PDFs are tagged, with a title, language and reading order. Slides use real titles and alt text.",
+];
+---
+
+<Layout title="Accessibility" description="Accessibility guidance for the RJM Laird brand: contrast-safe colour combinations, typography, interaction, motion, documents and a checklist. WCAG 2.2 AA.">
+  <header class="page-head">
+    <p class="kk">Accessibility</p>
+    <h1>Part of the system, not a finishing touch.</h1>
+    <p class="lede">How to use the brand accessibly across websites, presentations, reports, PDFs, social graphics and email signatures. The target is <strong>WCAG 2.2 AA</strong>, with AAA contrast wherever the palette allows it.</p>
+    <p style="margin-top:1.5rem"><a class="btn btn--outline" href="/assets/downloads/RJMLaird-Accessibility-Guidance.pdf" download>Download the guidance (PDF) <span aria-hidden="true">↓</span></a></p>
+  </header>
+
+  <section class="band band--alt" aria-labelledby="principle">
+    <h2 class="sr-only" id="principle">Guiding principle</h2>
+    <div class="callout">
+      <h3>In short</h3>
+      <p>Accessibility is part of the design system, not a finishing touch. Brand colours and visual treatments should never make information harder to read, understand or use.</p>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="contrast">
+    <p class="sl">1. Contrast-safe colour combinations</p>
+    <h2 class="h2" id="contrast">WCAG 2.2 AA <em>is the baseline.</em></h2>
+    <ul class="copy" style="margin-bottom:2rem">
+      <li><strong>Normal text:</strong> a contrast ratio of at least <strong>4.5:1</strong>.</li>
+      <li><strong>Large text:</strong> at least <strong>3:1</strong> (about 24 CSS px regular, or 18.7 CSS px bold).</li>
+      <li><strong>Meaningful graphics and UI components:</strong> at least <strong>3:1</strong> against adjacent colours.</li>
+      <li><strong>Non-colour cues:</strong> colour must never be the only way information, status or meaning is communicated.</li>
+    </ul>
+    <ul class="grid" style="--min:15rem;list-style:none">
+      {examples.map((e) => (
+        <li class="ex" style={`background:${e.bg};color:${e.fg}`}>
+          <p class="ex__aa" aria-hidden="true">Aa</p>
+          <p class="ex__label">{e.label}</p>
+          <p class="ex__note">{e.note}</p>
+          <p class:list={["ex__badge", e.g === "Fail" ? "is-fail" : "is-pass"]}><span aria-hidden="true">{e.g === "Fail" ? "✕" : "✓"}</span> {e.g === "Fail" ? "Fail" : "Pass"} · {fmt(e.r)}:1</p>
+        </li>
+      ))}
+    </ul>
+    <p class="copy" style="margin-top:1rem">Ratios are calculated with the WCAG relative-luminance method when the site is built. Treat accent pairings as starting points and test every real use. <a href="/colours/#matrix">See the full matrix.</a></p>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="rules">
+    <p class="sl">Recommended colour rules</p>
+    <h2 class="h2" id="rules">Which colour, <em>where.</em></h2>
+    <div class="table-wrap" role="region" aria-label="Recommended colour rules" tabindex="0" style="margin-top:2rem">
+      <table class="table">
+        <caption>Context and recommended treatment</caption>
+        <thead><tr><th scope="col">Context / use</th><th scope="col">Recommended treatment</th></tr></thead>
+        <tbody>{rules.map(([a, b]) => <tr><th scope="row">{a}</th><td>{b}</td></tr>)}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="type">
+    <p class="sl">2. Typography and layout</p>
+    <h2 class="h2" id="type">Text that <em>survives stress.</em></h2>
+    <ul class="grid" style="--min:16rem;margin-top:2rem;list-style:none">
+      <li class="card"><h3>Size and weight</h3><p>Body text is 16px (1rem) or larger, in rem so it scales. Below 24px use weight 400 or heavier.</p></li>
+      <li class="card"><h3>Line length and spacing</h3><p>Columns of 60–72 characters, line height of 1.6 or more, and space between paragraphs. Content must survive WCAG text-spacing overrides.</p></li>
+      <li class="card"><h3>Structure</h3><p>One h1, headings in order, lists as lists, tables with captions and header cells. Don’t use headings for size.</p></li>
+      <li class="card"><h3>Reflow and zoom</h3><p>No horizontal scrolling at 320px wide or 400% zoom, except for data tables and code in their own scroll region.</p></li>
+      <li class="card"><h3>Capitals</h3><p>Short uppercase labels are fine with wide tracking. Never set sentences or long headings in all caps.</p></li>
+      <li class="card"><h3>Language</h3><p>Plain language, short sentences, descriptive link text. Spell out acronyms on first use. Set the page language.</p></li>
+    </ul>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="interaction">
+    <p class="sl">3. Interaction</p>
+    <h2 class="h2" id="interaction">Easy to reach, <em>easy to see.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <ul class="copy">
+        <li><strong>Focus:</strong> a 3px ring in <code>#7FE6D4</code> with a 4px offset on every interactive element (12.9:1 on Ink). Never remove outlines without a replacement.</li>
+        <li><strong>Targets:</strong> 44 × 44 px minimum, and never below the 24 × 24 px WCAG 2.2 floor.</li>
+        <li><strong>Skip link</strong> as the first focusable element; keyboard order matches reading order.</li>
+        <li><strong>No hover-only content.</strong> Anything revealed on hover must also appear on focus and tap.</li>
+        <li><strong>Forced colours:</strong> keep a visible border on buttons so they survive Windows High Contrast.</li>
+      </ul>
+      <button class="btn btn--primary" type="button" style="justify-self:start">Tab to me to see the focus ring</button>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="motion">
+    <p class="sl">4. Motion and media</p>
+    <h2 class="h2" id="motion">Calm by default, <em>controllable always.</em></h2>
+    <ul class="copy" style="margin-top:1.5rem">
+      <li>Honour <code>prefers-reduced-motion</code>: stop animation and smooth scrolling.</li>
+      <li>Nothing flashes more than three times a second. Nothing autoplays with sound.</li>
+      <li>Decorative motion over five seconds gets a pause control, or is removed.</li>
+      <li>Video: captions, a transcript, and no information carried by sound alone.</li>
+    </ul>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="docs">
+    <p class="sl">5. Documents, slides, social and email</p>
+    <h2 class="h2" id="docs">Same rules, <em>every format.</em></h2>
+    <ul class="grid" style="--min:15rem;margin-top:2rem;list-style:none">
+      <li class="card"><h3>PDFs and reports</h3><p>Tagged PDF, document title and language, real headings, reading order, alt text. Ink on Warm White.</p></li>
+      <li class="card"><h3>Presentations</h3><p>24 pt body minimum, one idea per slide, unique slide titles, alt text, and no meaning carried by colour alone.</p></li>
+      <li class="card"><h3>Social graphics</h3><p>Short headline in the image, full message in the post text, alt text on every image, captions on video.</p></li>
+      <li class="card"><h3>Email and signatures</h3><p>Live text for names and links, Ink logo with alt text, no contact details inside images, links that name their destination.</p></li>
+    </ul>
+  </section>
+
+  <section class="band" aria-labelledby="checklist">
+    <p class="sl">Checklist</p>
+    <h2 class="h2" id="checklist">Before you <em>publish.</em></h2>
+    <ul class="checks">
+      {checklist.map((c) => <li><span class="box" aria-hidden="true">☐</span><span>{c}</span></li>)}
+    </ul>
+    <h3 class="h3" style="margin:2.5rem 0 .75rem">How to test</h3>
+    <div class="pill-row">
+      <span class="pill">Keyboard only</span><span class="pill">200% and 400% zoom</span><span class="pill">320px width</span><span class="pill">prefers-reduced-motion</span><span class="pill">Forced colours</span><span class="pill">Screen reader: NVDA or VoiceOver</span><span class="pill">axe or WAVE</span>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .copy li { list-style: disc; margin-left: 1.25rem; }
+  ul.copy { padding-left: 0; }
+  .ex { display: flex; flex-direction: column; gap: .35rem; padding: 1.25rem; border-radius: var(--radius); border: 1px solid var(--bd); }
+  .ex__aa { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; line-height: 1; }
+  .ex__label { font-family: var(--font-display); font-weight: 700; color: #0B0F1A; }
+  .ex__note { font-size: .85rem; line-height: 1.5; color: #0B0F1A; }
+  .ex__badge { align-self: flex-start; margin-top: auto; padding: .15rem .5rem; border-radius: 2px; font-family: var(--font-mono); font-size: .75rem; font-weight: 600; background: #0B0F1A; color: #EDEAE3; outline: 1px solid #EDEAE3; outline-offset: -1px; }
+  .ex__badge.is-pass { outline: 0; }
+  .checks { display: grid; gap: .6rem; margin-top: 2rem; max-width: 52rem; }
+  .checks li { display: flex; gap: .75rem; padding: .85rem 1rem; background: var(--card); border: 1px solid var(--bd); border-radius: var(--radius); color: var(--mb); line-height: 1.55; }
+  .box { color: var(--teal); font-size: 1.1rem; line-height: 1.3; }
+</style>

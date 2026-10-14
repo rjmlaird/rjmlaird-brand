@@ -1,0 +1,166 @@
+---
+import Layout from "../layouts/Layout.astro";
+import OrbitMark from "../components/OrbitMark.astro";
+import { accents, surfaces, text, siteFamily, brand } from "../data/brand";
+
+const principles = [
+  { n: "01", t: "Precise", d: "Claims are specific, sourced and checkable. Numbers carry units, and credentials are stated plainly." },
+  { n: "02", t: "Plain", d: "Short sentences, concrete nouns, and no jargon without a gloss. If a ten-second read doesn’t carry the point, the copy isn’t finished." },
+  { n: "03", t: "Curious", d: "Wonder is welcome. The identity borrows from orbits and instruments rather than stock galaxies and lens flares." },
+  { n: "04", t: "Accessible", d: "Contrast, structure and reduced-motion support are designed in, not retrofitted. WCAG 2.2 AA is the floor." },
+];
+
+const key = [surfaces[0], text[0], ...accents.slice(0, 6)];
+const toolkit = [
+  { glyph: "Aa", t: "Typography", d: "Space Grotesk, Inter and JetBrains Mono, with a scale you can reuse.", href: "/typography/" },
+  { glyph: "◌", t: "Visual language", d: "Orbit rings, kicker rules, tone-edged cards and photography direction.", href: "/visual-language/" },
+  { glyph: "↗", t: "Applications", d: "Web, slides, reports, email and social, with the logo version for each.", href: "/applications/" },
+  { glyph: "✓", t: "Accessibility", d: "Contrast-safe pairings, tested and computed, plus rules for documents and media.", href: "/accessibility/" },
+  { glyph: "{ }", t: "Developers", d: "Copy-paste CSS tokens, JSON tokens and component patterns.", href: "/developers/" },
+];
+---
+
+<Layout
+  title="Brand portal"
+  description="The logo, colour, typography and accessibility rules behind rjmlaird.co.uk: one system for science, space and strategy."
+>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__orb" aria-hidden="true"><OrbitMark /></div>
+    <div class="hero__copy">
+      <p class="kk">Brand portal</p>
+      <h1 id="hero-title">Precise, plain <span>and curious.</span></h1>
+      <p class="lede">
+        The visual and verbal system behind <strong>rjmlaird.co.uk</strong> and its sister sites: logo, colour, type, and the
+        accessibility rules that hold them together.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="/logo/">Explore the system <span aria-hidden="true">→</span></a>
+        <a class="btn btn--outline" href="/downloads/">Get the assets</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="idea">
+    <p class="sl">The idea</p>
+    <h2 class="h2" id="idea">Rooted in physics. <em>Written for people.</em></h2>
+    <p class="lede" style="margin-bottom:2rem">{brand.description} The brand has to hold all three: rigorous enough for scientists, clear enough for everyone else, and calm enough to build trust.</p>
+    <ul class="grid" style="--min:15rem">
+      {principles.map((p) => (
+        <li class="card">
+          <span class="num">{p.n}</span>
+          <h3>{p.t}</h3>
+          <p>{p.d}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="band" aria-labelledby="logo">
+    <div class="split">
+      <div>
+        <p class="sl">The logo system</p>
+        <h2 class="h2" id="logo">One mark. <em>Every scale.</em></h2>
+        <p class="lede" style="margin-bottom:1.5rem">An orbit mark and a two-tone wordmark, drawn as outlines so they hold up from a 16px favicon to a conference banner.</p>
+        <a href="/logo/">See logo rules and downloads <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="logo-stage">
+        <img src="/assets/logos/rjmlaird-horizontal-colour-on-dark.svg" alt="RJM Laird logo: an orbit mark beside the wordmark, with RJM in warm white and Laird in teal" width="449" height="120" />
+      </div>
+    </div>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="colour">
+    <p class="sl">Colour system</p>
+    <h2 class="h2" id="colour">Dark sky. <em>One clear signal.</em></h2>
+    <p class="lede" style="margin-bottom:2rem">Ink-first surfaces, warm white type and a single lead accent. Every pairing is contrast-tested, and the numbers are computed from the tokens.</p>
+    <ul class="swatches">
+      {key.map((s) => (
+        <li class="swatches__item">
+          <span class="swatches__chip" style={`background:${s.hex}`} aria-hidden="true"></span>
+          <span class="swatches__name">{s.name}</span>
+          <code class="swatches__hex">{s.hex}</code>
+        </li>
+      ))}
+    </ul>
+    <p style="margin-top:1.75rem"><a href="/colours/">See the full palette and contrast guide <span aria-hidden="true">→</span></a></p>
+  </section>
+
+  <section class="band" aria-labelledby="toolkit">
+    <p class="sl">A living toolkit</p>
+    <h2 class="h2" id="toolkit">Guidance that works <em>in the real world.</em></h2>
+    <ul class="grid" style="--min:15rem;margin-top:2rem">
+      {toolkit.map((c) => (
+        <li>
+          <a class="card" href={c.href} style="height:100%">
+            <span class="glyph" aria-hidden="true">{c.glyph}</span>
+            <h3>{c.t}</h3>
+            <p>{c.d}</p>
+            <span class="go">Open {c.t.toLowerCase()} <span aria-hidden="true">→</span></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="family">
+    <p class="sl">Where the brand lives</p>
+    <h2 class="h2" id="family">One system, <em>five sites.</em></h2>
+    <div class="table-wrap" role="region" aria-label="Sites using the brand" tabindex="0" style="margin-top:2rem">
+      <table class="table">
+        <caption>Sites in the rjmlaird.co.uk family</caption>
+        <thead><tr><th scope="col">Site</th><th scope="col">Role</th><th scope="col">Theme</th></tr></thead>
+        <tbody>
+          {siteFamily.map((s) => (
+            <tr><th scope="row"><a href={s.href}>{s.name}</a></th><td>{s.role}</td><td>{s.theme}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="close" aria-label="Closing statement">
+    <OrbitMark size="56px" />
+    <p>One system for science, space and strategy: <strong>clear enough to read, distinctive enough to remember.</strong></p>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    position: relative; overflow: hidden;
+    min-height: min(34rem, calc(100svh - var(--nav-h)));
+    display: flex; align-items: center;
+    padding-block: clamp(3rem, 8vw, 6rem);
+  }
+  .hero__orb {
+    position: absolute; top: 50%; right: calc(var(--gutter) * -.4); transform: translateY(-50%);
+    width: min(560px, 55vw); aspect-ratio: 1; opacity: .12; pointer-events: none;
+  }
+  .hero__copy { position: relative; z-index: 1; }
+  .hero h1 {
+    max-width: 14ch; margin-bottom: 1.5rem;
+    font-size: clamp(2.6rem, 7.5vw, 5.5rem); font-weight: 700; line-height: .98; letter-spacing: -.03em;
+  }
+  .hero h1 span { color: var(--mb); font-weight: 300; }
+  .hero .lede { margin-bottom: 2rem; }
+
+  .logo-stage {
+    display: grid; place-items: center; padding: clamp(2rem, 5vw, 3.5rem);
+    background: var(--card); border: 1px solid var(--bd); border-radius: var(--radius);
+  }
+  .logo-stage img { width: min(100%, 26rem); height: auto; }
+
+  .swatches { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); }
+  .swatches__item { display: flex; flex-direction: column; gap: .35rem; }
+  .swatches__chip { height: 4.5rem; border-radius: var(--radius); border: 1px solid var(--bm); }
+  .swatches__name { font-family: var(--font-display); font-size: .875rem; font-weight: 600; }
+  .swatches__hex { font-family: var(--font-mono); font-size: .75rem; color: var(--mb); }
+
+  .close {
+    display: flex; flex-direction: column; align-items: center; gap: 1.25rem; text-align: center;
+    padding-block: clamp(3.5rem, 8vw, 5.5rem);
+  }
+  .close p { max-width: 30rem; font-family: var(--font-display); font-size: clamp(1.15rem, 2.4vw, 1.5rem); line-height: 1.4; color: var(--mb); }
+  .close strong { color: var(--w); font-weight: 600; }
+
+  ul.grid { list-style: none; }
+</style>

@@ -1,0 +1,44 @@
+---
+import { brand } from "../data/brand";
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+  <div class="foot__brand">
+    <a class="foot__logo" href="/" aria-label={`${brand.name} brand portal, home`}>
+      <img src="/assets/logos/rjmlaird-horizontal-colour-on-dark.svg" alt="" width="140" height="37" loading="lazy" />
+    </a>
+    <p class="foot__tag">One system for science, space and strategy: clear enough to read, distinctive enough to remember.</p>
+  </div>
+
+  <nav class="foot__links" aria-label="Footer">
+    <a href="/downloads/">Downloads</a>
+    <a href="/accessibility/">Accessibility</a>
+    <a href="/developers/">Developers</a>
+    <a href={brand.mainSite}>rjmlaird.co.uk</a>
+  </nav>
+
+  <p class="foot__meta">Brand guidelines · v{brand.version} · {brand.year} · © {year} Ryan J. M. Laird</p>
+</footer>
+
+<style>
+  .foot {
+    display: grid; gap: 1.75rem 3rem; grid-template-columns: minmax(0, 1fr) auto;
+    padding: 2.5rem var(--gutter) 2rem; border-top: 1px solid var(--bd); background: var(--ink2);
+  }
+  .foot__logo { display: inline-flex; line-height: 0; }
+  .foot__logo img { height: 2rem; width: auto; display: block; }
+  .foot__tag { max-width: 32rem; margin-top: 1rem; font-size: .9rem; line-height: 1.7; color: var(--mb); }
+  .foot__links { display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: flex-end; gap: .25rem 1.5rem; }
+  .foot__links a {
+    display: inline-flex; align-items: center; min-height: 44px;
+    font-family: var(--font-display); font-size: .8125rem; font-weight: 500; color: var(--mb); text-decoration: none;
+  }
+  .foot__links a:hover { color: var(--w); }
+  .foot__meta { grid-column: 1 / -1; padding-top: 1.25rem; border-top: 1px solid var(--bd); font-family: var(--font-display); font-size: .75rem; color: var(--m); }
+
+  @media (max-width: 760px) {
+    .foot { grid-template-columns: 1fr; }
+    .foot__links { justify-content: flex-start; }
+  }
+</style>

@@ -1,0 +1,148 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+import tokensCss from "../styles/tokens.css?raw";
+import { surfaces, text, accents, lines } from "../data/brand";
+
+const rows = [
+  ...surfaces.map((s) => ({ group: "Surface", name: s.name, token: s.token, value: s.hex, swatch: s.hex })),
+  ...text.map((s) => ({ group: "Text", name: s.name, token: s.token, value: s.hex, swatch: s.hex })),
+  ...accents.flatMap((a) => [
+    { group: "Accent", name: a.name, token: a.token, value: a.hex, swatch: a.hex },
+    { group: "Tint", name: `${a.name} tint`, token: a.dimToken, value: a.dim, swatch: a.dim },
+    { group: "Border", name: `${a.name} border`, token: a.borderToken, value: a.border, swatch: a.border },
+  ]),
+  ...lines.map((l) => ({ group: "Line", name: l.name, token: l.token, value: l.value, swatch: l.value })),
+];
+
+const start = `<!-- 1. Link or inline the tokens -->
+<link rel="stylesheet" href="https://brand.rjmlaird.co.uk/downloads/tokens.css">
+
+<!-- 2. Use them -->
+<style>
+  body { background: var(--ink); color: var(--w); font-family: var(--font-body); }
+  a    { color: var(--teal); }
+  .card { background: var(--card); border: 1px solid var(--bd); border-radius: var(--radius); }
+</style>`;
+
+const button = `.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: .72rem 1.5rem; border-radius: 3px;
+  font-family: var(--font-display); font-size: .875rem; font-weight: 600; letter-spacing: .03em;
+  text-decoration: none;
+}
+.btn--primary { background: var(--teal); color: var(--ink); }   /* 8.46:1 */
+.btn--outline { color: var(--w); border: 1px solid var(--bm); }`;
+
+const a11y = `:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 2px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: .001ms !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible { outline-color: Highlight; }
+  .btn { border: 1px solid ButtonText; }
+}`;
+
+const pill = `.pill {
+  display: inline-flex; padding: .22rem .6rem; border-radius: 2px;
+  font-family: var(--font-display); font-size: .6875rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+}
+.pill--teal  { background: var(--td); color: var(--teal);  border: 1px solid var(--tb); }
+.pill--amber { background: var(--ad); color: var(--amber); border: 1px solid var(--ab); }`;
+
+const theme = `<html lang="en-GB" data-theme="space">   <!-- amber leads, teal supports -->`;
+---
+
+<Layout title="Developers" description="CSS and JSON design tokens, copy-paste patterns and accessibility CSS for building with the RJM Laird brand.">
+  <header class="page-head">
+    <p class="kk">Developers</p>
+    <h1>Tokens you can paste.</h1>
+    <p class="lede">The brand is a set of CSS custom properties. They are plain CSS with no build step, so they work in Astro, in a Hono-rendered page, or in a static HTML file.</p>
+    <div class="btn-row" style="margin-top:1.5rem">
+      <a class="btn btn--primary" href="/downloads/tokens.css" download>tokens.css <span aria-hidden="true">↓</span></a>
+      <a class="btn btn--outline" href="/downloads/tokens.json" download>tokens.json <span aria-hidden="true">↓</span></a>
+    </div>
+  </header>
+
+  <section class="band band--alt" aria-labelledby="start">
+    <p class="sl">Quick start</p>
+    <h2 class="h2" id="start">Two steps, <em>then build.</em></h2>
+    <div class="stack" style="margin-top:2rem">
+      <CodeBlock id="code-start" label="HTML" code={start} />
+      <p class="copy">Load the fonts with Fontsource as shown on the <a href="/typography/#load">typography page</a>. For a themed site, set one attribute:</p>
+      <CodeBlock id="code-theme" label="HTML" code={theme} />
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="ref">
+    <p class="sl">Token reference</p>
+    <h2 class="h2" id="ref">Every <em>custom property.</em></h2>
+    <div class="table-wrap" role="region" aria-label="Token reference" tabindex="0" style="margin-top:2rem">
+      <table class="table">
+        <caption>Colour tokens</caption>
+        <thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Token</th><th scope="col">Value</th><th scope="col"><span class="sr-only">Swatch</span></th></tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <th scope="row">{r.name}</th><td>{r.group}</td><td><code class="inline">{r.token}</code></td><td><code class="inline">{r.value}</code></td>
+              <td><span class="chip" style={`--c:${r.swatch}`} aria-hidden="true"></span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="copy" style="margin-top:1rem">Layout and type tokens (<code>--content-max</code>, <code>--gutter</code>, <code>--section-y</code>, <code>--nav-h</code>, <code>--radius</code>, <code>--font-display</code>, <code>--font-body</code>, <code>--font-mono</code>) are in the file below. Bridge tokens (<code>--color-text</code>, <code>--color-accent</code> and others) map generic component palettes onto the brand.</p>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="patterns">
+    <p class="sl">Patterns</p>
+    <h2 class="h2" id="patterns">Small pieces <em>that repeat.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <div class="stack">
+        <h3 class="h3">Buttons</h3>
+        <div class="btn-row"><a class="btn btn--primary" href="#patterns">Primary</a><a class="btn btn--outline" href="#patterns">Outline</a></div>
+        <CodeBlock id="code-button" label="CSS" code={button} />
+      </div>
+      <div class="stack">
+        <h3 class="h3">Tinted pills</h3>
+        <div class="pill-row"><span class="pill pill--teal">In progress</span><span class="pill pill--amber">Paused</span></div>
+        <CodeBlock id="code-pill" label="CSS" code={pill} />
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="a11y">
+    <p class="sl">Accessibility CSS</p>
+    <h2 class="h2" id="a11y">Include these <em>on every site.</em></h2>
+    <div class="stack" style="margin-top:2rem">
+      <CodeBlock id="code-a11y" label="CSS" code={a11y} />
+    </div>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="source">
+    <p class="sl">Source</p>
+    <h2 class="h2" id="source">The complete <em>tokens.css.</em></h2>
+    <div class="stack" style="margin-top:2rem">
+      <CodeBlock id="code-tokens" label="tokens.css" code={tokensCss} />
+      <p class="copy">This repository’s build runs <code>npm run check</code>, which fails if <code>tokens.css</code> and the data behind this site disagree, if any documented colour pairing drops below its stated contrast, or if a logo or font reference breaks.</p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .chip { display: inline-block; width: 2.2rem; height: 1.2rem; border-radius: 3px; border: 1px solid var(--bm); background: var(--c); }
+  .stack > * + * { margin-top: 1.25rem; }
+</style>

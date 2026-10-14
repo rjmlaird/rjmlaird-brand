@@ -1,0 +1,177 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SwatchCard from "../components/SwatchCard.astro";
+import ContrastMatrix from "../components/ContrastMatrix.astro";
+import { surfaces, text, accents, lines, statusRoles, topicRoles, extras, safePairs } from "../data/brand";
+import { ratio, fmt, grade, blend } from "../lib/contrast";
+
+const bgs = [
+  { name: "Ink", hex: "#0B0F1A" },
+  { name: "Card", hex: "#141B29" },
+  { name: "Lift", hex: "#1A2236" },
+  { name: "Warm White", hex: "#EDEAE3" },
+  { name: "White", hex: extras.white },
+];
+const fgs = [...text, ...accents, { name: "Ink", hex: "#0B0F1A" }].map((s) => ({ name: s.name, hex: s.hex }));
+
+// Accent text on its own tint, composited over Card (how the live site draws pills).
+const tintRows = accents.map((a) => {
+  const bg = blend(a.dim, "#141B29");
+  const r = ratio(a.hex, bg);
+  return { name: a.name, hex: a.hex, bg, r, g: grade(r) };
+});
+
+const onLight = accents.filter((a) => ratio(a.hex, "#EDEAE3") >= 3);
+const best = Math.max(...accents.map((a) => ratio(a.hex, "#EDEAE3")));
+const passCount = safePairs.filter((p) => ratio(p.fg, p.bg) >= p.min).length;
+---
+
+<Layout title="Colours" description="The RJM Laird palette: surfaces, text, accents and tints, with computed WCAG contrast for every pairing.">
+  <header class="page-head">
+    <p class="kk">Colours</p>
+    <h1>Dark sky. One clear signal.</h1>
+    <p class="lede">
+      Ink-first surfaces, warm white type and teal as the lead accent. Five supporting accents carry meaning, never decoration alone.
+      Every ratio on this page is calculated from the hex values when the site is built.
+    </p>
+  </header>
+
+  <section class="band band--alt" aria-labelledby="principles">
+    <p class="sl">Principles</p>
+    <h2 class="h2" id="principles">Four rules <em>for using colour.</em></h2>
+    <ul class="grid" style="--min:15rem;margin-top:2rem">
+      <li class="card"><span class="num">01</span><h3>Ink first</h3><p>Surfaces are Ink, Ink 2, Card and Lift. Pure black and pure white are not brand colours.</p></li>
+      <li class="card"><span class="num">02</span><h3>One lead accent</h3><p>Teal leads: links, buttons, the wordmark. Use one accent per component, and let the rest carry roles.</p></li>
+      <li class="card"><span class="num">03</span><h3>Colour plus a word</h3><p>Status and category are always written out. Colour is never the only signal.</p></li>
+      <li class="card"><span class="num">04</span><h3>Test the real pairing</h3><p>Check hover states, overlays and transparency. The matrix below is a starting point, not a licence.</p></li>
+    </ul>
+  </section>
+
+  <section class="band" aria-labelledby="surfaces">
+    <p class="sl">Surfaces</p>
+    <h2 class="h2" id="surfaces">Layers of <em>ink.</em></h2>
+    <ul class="grid" style="--min:15rem;margin-top:2rem">
+      {surfaces.map((s) => <li><SwatchCard swatch={s} /></li>)}
+    </ul>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="textcol">
+    <p class="sl">Text</p>
+    <h2 class="h2" id="textcol">Warm white, <em>then two greys.</em></h2>
+    <ul class="grid" style="--min:15rem;margin-top:2rem">
+      {text.map((s) => <li><SwatchCard swatch={s} /></li>)}
+    </ul>
+  </section>
+
+  <section class="band" aria-labelledby="accents">
+    <p class="sl">Accents</p>
+    <h2 class="h2" id="accents">Six signals, <em>each with a role.</em></h2>
+    <p class="lede" style="margin-bottom:2rem">Each accent has a <strong>tint</strong> (an 11–13% fill) and a <strong>border</strong> (a 26–30% line) for pills, callouts and cards.</p>
+    <ul class="grid" style="--min:17rem">
+      {accents.map((a) => <li><SwatchCard swatch={a} tints /></li>)}
+    </ul>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="lines">
+    <p class="sl">Lines and focus</p>
+    <h2 class="h2" id="lines">Hairlines, <em>not shadows.</em></h2>
+    <div class="table-wrap" role="region" aria-label="Line and focus tokens" tabindex="0" style="margin-top:2rem">
+      <table class="table">
+        <caption>Borders and focus</caption>
+        <thead><tr><th scope="col">Name</th><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Use</th></tr></thead>
+        <tbody>
+          {lines.map((l) => (
+            <tr><th scope="row">{l.name}</th><td><code class="inline">{l.token}</code></td><td><code class="inline">{l.value}</code></td><td>{l.usage}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="roles">
+    <p class="sl">Colour roles in use</p>
+    <h2 class="h2" id="roles">What each colour <em>means.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <div>
+        <h3 class="h3" style="margin-bottom:.9rem">Project status</h3>
+        <ul class="pill-row">
+          {statusRoles.map((r) => <li><span class={`pill pill--${r.colour}`}>{r.label}</span></li>)}
+        </ul>
+      </div>
+      <div>
+        <h3 class="h3" style="margin-bottom:.9rem">Topic and publication</h3>
+        <ul class="pill-row">
+          {topicRoles.map((r) => <li><span class={`pill pill--${r.colour}`}>{r.label}</span></li>)}
+        </ul>
+      </div>
+    </div>
+    <p class="copy" style="margin-top:1.5rem">Every pill carries its label as text. Don’t introduce a new meaning for an existing colour; add a label instead.</p>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="matrix">
+    <p class="sl">Contrast guide</p>
+    <h2 class="h2" id="matrix">Every pairing, <em>measured.</em></h2>
+    <p class="lede" style="margin-bottom:2rem">
+      Text and graphic colours down the side, backgrounds across the top. The brand relies on {safePairs.length} documented pairings;
+      <strong>{passCount} of {safePairs.length} meet their stated threshold</strong>, and <code class="inline">npm run check</code> fails the build if that changes.
+    </p>
+    <ContrastMatrix caption="WCAG contrast ratios, foreground on background" fgs={fgs} bgs={bgs} />
+  </section>
+
+  <section class="band" aria-labelledby="tints">
+    <p class="sl">Tints</p>
+    <h2 class="h2" id="tints">Accent text <em>on its own tint.</em></h2>
+    <p class="lede" style="margin-bottom:2rem">Pills use the solid accent as text over its tint, composited on Card. That is the combination to test.</p>
+    <div class="table-wrap" role="region" aria-label="Accent text on tinted fills" tabindex="0">
+      <table class="table">
+        <caption>Accent on its own tint over Card</caption>
+        <thead><tr><th scope="col">Accent</th><th scope="col">Sample</th><th scope="col">Tinted background</th><th scope="col">Ratio</th><th scope="col">Result</th></tr></thead>
+        <tbody>
+          {tintRows.map((t) => (
+            <tr>
+              <th scope="row">{t.name}</th>
+              <td><span style={`display:inline-block;padding:.2rem .6rem;border-radius:2px;background:${t.bg};color:${t.hex};font-family:var(--font-display);font-weight:700;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase`}>{t.name}</span></td>
+              <td><code class="inline">{t.bg}</code></td>
+              <td>{fmt(t.r)}:1</td>
+              <td>{t.g === "Fail" ? "✕ Fail" : `✓ ${t.g}`}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="light">
+    <p class="sl">Light backgrounds</p>
+    <h2 class="h2" id="light">Where the palette <em>runs out.</em></h2>
+    <div class="split" style="margin-top:2rem">
+      <div class="copy">
+        <p>
+          The brand is dark-first. On Warm White the best accent reaches only <strong>{fmt(best)}:1</strong>
+          {onLight.length === 0 ? ", so no accent meets even the 3:1 graphics threshold." : `, and only ${onLight.map((a) => a.name).join(", ")} reach 3:1.`}
+        </p>
+        <p>For light documents:</p>
+        <ul>
+          <li>Set text in <strong>Ink</strong> (15.9:1 on Warm White, 19.1:1 on white).</li>
+          <li>Use an accent only as a <strong>fill with Ink text on top</strong>, for example Ink on Teal at 8.46:1.</li>
+          <li>Never use an accent as text, a thin line or an icon on a light background.</li>
+        </ul>
+      </div>
+      <div class="light-demo" aria-label="Example of a light document using Ink text and a teal fill">
+        <p class="light-demo__label">Report</p>
+        <p class="light-demo__title">Ink on Warm White</p>
+        <p class="light-demo__body">Body text in Ink stays readable at any size.</p>
+        <p class="light-demo__fill">Teal fill, Ink text</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  ul.grid { list-style: none; }
+  .light-demo { padding: 1.75rem; background: #EDEAE3; color: #0B0F1A; border-radius: var(--radius); display: grid; gap: .75rem; max-width: 24rem; }
+  .light-demo__label { font-family: var(--font-display); font-size: .75rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+  .light-demo__title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; line-height: 1.1; letter-spacing: -.02em; }
+  .light-demo__body { font-size: .95rem; line-height: 1.6; }
+  .light-demo__fill { display: inline-block; justify-self: start; padding: .4rem .8rem; background: #00C2A8; color: #0B0F1A; font-family: var(--font-display); font-weight: 600; font-size: .875rem; border-radius: 3px; }
+</style>

@@ -1,0 +1,79 @@
+---
+import { nav, brand } from "../data/brand";
+
+export interface Props {
+  current: string;
+}
+const { current } = Astro.props as Props;
+
+// Path-segment comparison, so "/logo/" never matches "/logo-archive/".
+const clean = (p: string) => p.replace(/\/+$/, "") || "/";
+const isCurrent = (href: string) => clean(current) === clean(href) || clean(current).startsWith(clean(href) + "/");
+---
+
+<nav class="nav" aria-label="Primary">
+  <a class="nav__logo" href="/" aria-label={`${brand.name} brand portal, home`}>
+    <img src="/assets/logos/rjmlaird-horizontal-colour-on-dark.svg" alt="" width="112" height="30" />
+  </a>
+
+  <ul class="nav__links">
+    {nav.map((item) => (
+      <li>
+        <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>{item.label}</a>
+      </li>
+    ))}
+  </ul>
+
+  <div class="nav__right">
+    <span class="nav__ver">v{brand.version}</span>
+    <a class="nav__site" href={brand.mainSite}>rjmlaird.co.uk<span class="sr-only"> (main site)</span> <span aria-hidden="true">↗</span></a>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: sticky; top: 0; z-index: 300;
+    display: flex; align-items: center; justify-content: space-between; gap: 1.25rem;
+    min-height: var(--nav-h);
+    padding: .65rem var(--gutter);
+    background: rgba(11, 15, 26, .96);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--bd);
+  }
+  .nav__logo { display: inline-flex; flex: none; line-height: 0; }
+  .nav__logo img { display: block; height: 1.9rem; width: auto; }
+
+  .nav__links { display: flex; gap: 1.4rem; }
+  .nav__links a {
+    display: inline-block; padding-block: .35rem;
+    font-family: var(--font-display); font-size: .8125rem; font-weight: 500; letter-spacing: .04em;
+    color: var(--mb); text-decoration: none; white-space: nowrap; transition: color .2s;
+  }
+  .nav__links a:hover { color: var(--w); }
+  .nav__links a[aria-current="page"] { color: var(--teal); box-shadow: 0 1px 0 var(--teal); }
+
+  .nav__right { display: flex; align-items: center; gap: .9rem; flex: none; }
+  .nav__ver { font-family: var(--font-mono); font-size: .75rem; color: var(--m); }
+  .nav__site {
+    display: inline-flex; align-items: center; min-height: 36px; padding: .3rem .7rem;
+    border: 1px solid var(--bm); border-radius: 3px;
+    font-family: var(--font-display); font-size: .75rem; font-weight: 500; color: var(--mb); text-decoration: none;
+    transition: border-color .2s, color .2s;
+  }
+  .nav__site:hover { border-color: var(--m); color: var(--w); }
+
+  @media (pointer: coarse) {
+    .nav__links a { padding-block: .6rem; }
+    .nav__site { min-height: 44px; }
+  }
+
+  @media (max-width: 1100px) {
+    .nav { flex-wrap: wrap; row-gap: .25rem; }
+    .nav__links { order: 3; width: 100%; gap: 1.25rem; overflow-x: auto; scrollbar-width: none; padding-bottom: .15rem; }
+    .nav__links::-webkit-scrollbar { display: none; }
+  }
+  @media (max-width: 480px) {
+    .nav__ver { display: none; }
+  }
+</style>

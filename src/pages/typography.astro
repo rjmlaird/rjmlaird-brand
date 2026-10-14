@@ -1,0 +1,117 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+
+const families = [
+  { name: "Space Grotesk", role: "Display", font: "var(--font-display)", weights: "300 · 500 · 600 · 700", use: "Headings, labels, navigation, buttons and the wordmark. Tight tracking at large sizes, wide tracking on small caps." },
+  { name: "Inter", role: "Body", font: "var(--font-body)", weights: "400 · 500 · 600", use: "Paragraphs, long-form text, captions and form fields. Chosen for legibility at small sizes." },
+  { name: "JetBrains Mono", role: "Data", font: "var(--font-mono)", weights: "400 · 600", use: "Credentials, post-nominals, code, hex values and tabular data." },
+];
+
+// Mirrors the live site's CSS.
+const scale = [
+  { name: "Display", css: "clamp(2.6rem, 7.5vw, 5.5rem)", w: 700, lh: 0.98, ls: "-.03em", font: "d", sample: "Precise, plain" },
+  { name: "Page title", css: "clamp(2rem, 5vw, 3.5rem)", w: 700, lh: 1.05, ls: "-.03em", font: "d", sample: "Colours and contrast" },
+  { name: "Section heading", css: "clamp(1.45rem, 2.6vw, 2.15rem)", w: 600, lh: 1.15, ls: "-.02em", font: "d", sample: "Rooted in physics" },
+  { name: "Card title", css: "1.2rem", w: 600, lh: 1.3, ls: "-.015em", font: "d", sample: "Orbit rings and kickers" },
+  { name: "Body", css: "1rem (long-form 1.0625rem)", w: 400, lh: 1.75, ls: "0", font: "b", sample: "Short sentences and concrete nouns carry the idea. If it doesn’t read in ten seconds, it isn’t finished." },
+  { name: "Caption", css: ".8125rem", w: 400, lh: 1.6, ls: "0", font: "b", sample: "Image credit: NASA, ESA and the Hubble Heritage Team" },
+  { name: "Label", css: ".75rem, uppercase", w: 700, lh: 1.2, ls: ".22em", font: "d", sample: "Brand portal" },
+  { name: "Credentials", css: ".8125rem, mono", w: 600, lh: 1.4, ls: ".02em", font: "m", sample: "MPhys (Hons) FRAS MInstP CMktr MCIPR" },
+];
+
+const css = `/* Static fonts via Fontsource (matches the token stacks exactly) */
+import "@fontsource/space-grotesk/300.css";
+import "@fontsource/space-grotesk/500.css";
+import "@fontsource/space-grotesk/600.css";
+import "@fontsource/space-grotesk/700.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/600.css";`;
+---
+
+<Layout title="Typography" description="Space Grotesk, Inter and JetBrains Mono: roles, type scale, and rules for readable text.">
+  <header class="page-head">
+    <p class="kk">Typography</p>
+    <h1>Clear first. Characterful second.</h1>
+    <p class="lede">Three families, each with one job. Space Grotesk gives headings their voice, Inter keeps paragraphs easy to read, and JetBrains Mono marks anything that is data.</p>
+  </header>
+
+  <section class="band band--alt" aria-labelledby="fam">
+    <p class="sl">Families</p>
+    <h2 class="h2" id="fam">Three typefaces, <em>three roles.</em></h2>
+    <ul class="grid" style="--min:19rem;margin-top:2rem;list-style:none">
+      {families.map((f) => (
+        <li class="card">
+          <span class="num">{f.role}</span>
+          <p class="aa" style={`font-family:${f.font}`} aria-hidden="true">Aa</p>
+          <h3>{f.name}</h3>
+          <p style={`font-family:${f.font};font-size:1.05rem;color:var(--w)`}>ABCDEFGHIJKLM<br />abcdefghijklm<br />0123456789 &amp; ?!</p>
+          <p><strong>Weights:</strong> {f.weights}</p>
+          <p>{f.use}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="band" aria-labelledby="scale">
+    <p class="sl">Type scale</p>
+    <h2 class="h2" id="scale">Eight styles <em>cover everything.</em></h2>
+    <ul class="scale">
+      {scale.map((s) => (
+        <li class="scale__row">
+          <div class="scale__meta">
+            <h3>{s.name}</h3>
+            <dl class="spec">
+              <dt>Size</dt><dd>{s.css}</dd>
+              <dt>Weight</dt><dd>{s.w}</dd>
+              <dt>Line</dt><dd>{s.lh}</dd>
+              <dt>Tracking</dt><dd>{s.ls}</dd>
+            </dl>
+          </div>
+          <p class="scale__sample" style={`font-family:var(--font-${s.font === "d" ? "display" : s.font === "b" ? "body" : "mono"});font-weight:${s.w};line-height:${s.lh};letter-spacing:${s.ls};${
+            s.name === "Display" ? "font-size:clamp(2rem,6vw,4.4rem)" :
+            s.name === "Page title" ? "font-size:clamp(1.8rem,4vw,3rem)" :
+            s.name === "Section heading" ? "font-size:clamp(1.4rem,2.6vw,2.15rem)" :
+            s.name === "Card title" ? "font-size:1.2rem" :
+            s.name === "Body" ? "font-size:1.0625rem;color:var(--mb)" :
+            s.name === "Caption" ? "font-size:.8125rem;color:var(--mb)" :
+            s.name === "Label" ? "font-size:.75rem;text-transform:uppercase;color:var(--teal)" :
+            "font-size:.8125rem;color:var(--amber)"}`}>{s.sample}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="band band--alt" aria-labelledby="rules">
+    <p class="sl">Rules</p>
+    <h2 class="h2" id="rules">Make it <em>easy to read.</em></h2>
+    <ul class="grid" style="--min:16rem;margin-top:2rem;list-style:none">
+      <li class="card"><h3>Sentence case</h3><p>Headings and buttons use sentence case. Reserve uppercase for short labels, always with wide tracking.</p></li>
+      <li class="card"><h3>16 px minimum body</h3><p>Body text is 1rem or larger. The smallest permitted text is .75rem, and only for labels and metadata.</p></li>
+      <li class="card"><h3>Lines of 60–72 characters</h3><p>Long-form copy sits in a column of about 72ch. Wider lines tire readers and break reflow.</p></li>
+      <li class="card"><h3>Heavy for big, light never small</h3><p>Weight 300 appears only in very large display text. Below 24px, use 400 or heavier.</p></li>
+      <li class="card"><h3>Balanced headings</h3><p>Use <code class="inline">text-wrap: balance</code> on headings and <code class="inline">pretty</code> on paragraphs to avoid orphans.</p></li>
+      <li class="card"><h3>Respect user settings</h3><p>Size in rem, never px. Content must survive 200% zoom, 320px reflow and user text-spacing overrides.</p></li>
+    </ul>
+  </section>
+
+  <section class="band" aria-labelledby="load">
+    <p class="sl">Loading</p>
+    <h2 class="h2" id="load">Self-host <em>the fonts.</em></h2>
+    <p class="lede" style="margin-bottom:1.5rem">No third-party requests, no layout shift from a late stylesheet. The stacks fall back to system fonts with similar metrics.</p>
+    <CodeBlock id="code-fonts" label="JavaScript or Astro frontmatter" code={css} />
+  </section>
+</Layout>
+
+<style>
+  .aa { font-size: 3.2rem; font-weight: 700; line-height: 1; color: var(--w); }
+  .scale { list-style: none; margin-top: 2rem; border-top: 1px solid var(--bd); }
+  .scale__row { display: grid; gap: 1.5rem 3rem; grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr); align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--bd); }
+  .scale__meta h3 { margin-bottom: .6rem; font-size: .95rem; }
+  .scale__meta .spec { grid-template-columns: max-content 1fr; font-size: .75rem; gap: .2rem .8rem; }
+  .scale__sample { margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
+  @media (max-width: 760px) { .scale__row { grid-template-columns: 1fr; } }
+</style>
