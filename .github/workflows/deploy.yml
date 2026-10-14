@@ -1,5 +1,4 @@
-
-name: Deploy to GitHub Pages
+name: Deploy brand portal to GitHub Pages
 
 on:
   push:
@@ -13,75 +12,45 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: true
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Pages
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Install pnpm
+      - name: Set up pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 11.11.0
           run_install: false
 
-      - name: Setup Node.js
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
 
-      - name: Verify toolchain
-        run: |
-          echo "Node:"
-          node --version
-
-          echo "pnpm:"
-          pnpm --version
-
-          echo "minimumReleaseAge:"
-          pnpm config get minimumReleaseAge
-
-          echo "minimumReleaseAgeExclude:"
-          pnpm config get minimumReleaseAgeExclude
-
-          echo "allowBuilds:"
-          pnpm config get allowBuilds
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build or copy files
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build site
+        run: pnpm run build
+
+      - name: Confirm build output
         run: |
-          rm -rf dist
-
-          if [ -f package.json ]; then
-            echo "Detected package.json → Running build"
-            pnpm run build
-          else
-            echo "Static site detected → Copying files"
-            mkdir -p dist
-
-            find . -maxdepth 1 \
-              ! -name "dist" \
-              ! -name ".git" \
-              ! -name ".github" \
-              ! -name "." \
-              -exec cp -R {} dist/ \;
-          fi
-
-          echo "Dist directory contents:"
-          ls -al dist
+          test -f dist/index.html
+          test -f dist/CNAME
+          echo "Build output:"
+          ls -la dist
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
@@ -89,6 +58,7 @@ jobs:
           path: ./dist
 
   deploy:
+    name: Deploy
     needs: build
     runs-on: ubuntu-latest
 
